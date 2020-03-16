@@ -122,7 +122,7 @@ export default {
     methods: {
       getWeather () {
         this.isLoaded = false
-        axios.get(`http://api.weatherapi.com/v1/forecast.json?key=${this.key}&q=${this.zipCode}&days=1`)
+        axios.get(`https://api.weatherapi.com/v1/forecast.json?key=${this.key}&q=${this.zipCode}&days=1`)
           .then(resp => {
             return resp.data
           }).then(data => {
