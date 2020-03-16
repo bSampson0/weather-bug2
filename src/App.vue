@@ -20,9 +20,7 @@
             dark
           >
             <v-toolbar-title><v-icon>mdi-weather-lightning</v-icon> <span class="bold">Weather</span>Wiz</v-toolbar-title>
-
             <v-spacer></v-spacer>
-            
             <v-menu offset-y left :close-on-content-click="false" v-model="menuOpen">
               <template v-slot:activator="{ on }">
                 <v-btn icon v-on="on">
@@ -52,20 +50,17 @@
           </v-toolbar>
           <div v-if="isLoaded" class="weather-widget">
             <WeatherCard
-              :city = "city"
-              :state = "state"
-              :localtime = "localtime"
-              :tempF = "tempF"
+              :city = "data.name"
+              :tempF = "parseInt(data.main.feels_like)"
               :imgUrl = "imgUrl"
-              :windSpeed= "windSpeed"
-              :humidity= "humidity"
-              :fullReportUrl= "fullReportUrl"
-              :tomTempF = "tomTemp"
-              :maxTempF = "maxTempF"
-              :minTempF = "minTempF"
+              :imgAlt = "data.weather[0].description"
+              :windSpeed= "data.wind.speed"
+              :humidity= "data.main.humidity"
+              :maxTempF = "parseInt(data.main.temp_max)"
+              :minTempF = "parseInt(data.main.temp_min)"
             />
           </div>
-          <div v-else class="waiting text-center">
+          <div v-else class="waiting text-center mt-10">
             <v-progress-circular
               indeterminate
               color="primary"
@@ -95,59 +90,40 @@ export default {
   },
   data: () => ({
     menuOpen: false,
-    tempF: null,
-    lastUpdated: null,
-    currentCondition: null,
-    tomTemp: null,
-    tomCondition:null,
-    zipCode: '97701',
-    city: null,
-    state: null,
-    localtime: null,
-    imgUrl: null,
-    imgAlt: null,
-    windSpeed: null,
-    humidity: null,
-    fullReportUrl: null,
-    minTempF: null,
-    maxTempF:null,
-    lat: null,
-    lon: null,
+    data: {},
     isLoaded: false,
+    zipCode: '97701',
+    imgUrl: '',
     key: 'd1f37ccd92a94a5ba8a21313202701'
   }),
   created() {
       this.getWeather()
     },
     methods: {
-      getWeather () {
+      async getWeather () {
         this.isLoaded = false
-        axios.get(`https://api.weatherapi.com/v1/forecast.json?key=${this.key}&q=${this.zipCode}&days=1`)
-          .then(resp => {
-            return resp.data
+        this.menuOpen = false
+        try {
+          await axios({
+            url: `https://community-open-weather-map.p.rapidapi.com/find`,
+            method: 'GET',
+            headers: {"X-RapidAPI-Key": "ee8b7255d6msh6353b4abd900d53p1d68f7jsn51d306c93256"},
+            params: {
+              "type": "link%2C accurate",
+              "units": "imperial",
+              "q": this.zipCode + ',us'
+            }
+          }).then(resp => {
+            return resp.data.list[0]
           }).then(data => {
-            this.tempF = parseInt(data.current.temp_f)
-            this.lastUpdated = data.current.last_updated
-            this.currentCondition = data.current.condition.text
-            this.maxTempF = parseInt(data.forecast.forecastday[0].day.maxtemp_f)
-            this.minTempF = parseInt(data.forecast.forecastday[0].day.mintemp_f)
-            this.city = data.location.name
-            this.state = data.location.region
-            this.localtime = data.location.localtime
-            this.imgUrl = 'http:' + data.current.condition.icon
-            this.imgAlt = data.current.condition.text
-            this.windSpeed = data.current.wind_mph
-            this.humidity = data.current.humidity
-            this.lat = data.location.lat
-            this.lon = data.location.lon
-            this.fullReportUrl = `https://forecast.weather.gov/MapClick.php?lat=${this.lat}&lon=${this.lon}`
-            console.log(this.imgAlt)
-            console.log(data)
+            this.data = data
+            this.imgUrl = `http://openweathermap.org/img/wn/${this.data.weather[0].icon}@2x.png`
+            this.isLoaded = true
           })
-          this.menuOpen = false
-          this.isLoaded = true
+          } catch (error) {
+            console.log(error)
+          }
       },
-      
     }
 }
 </script>

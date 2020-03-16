@@ -21,7 +21,7 @@
                 <div class="weather-icon text-center">
                   <v-row justify="center">
                     <v-img 
-                      :src="imgSrc" 
+                      :src="imgSrc"
                       max-height="70px" 
                       max-width="70px" 
                       >
@@ -29,14 +29,17 @@
                   </v-row>
                   <!-- <i class="mdi mdi-white-balance-sunny"></i> -->
                 </div>
-                <v-card-title class="justify-center">{{tempF}}&deg;F</v-card-title>
+                <div class="current-temp text-center pt-8">
+                  <p style="margin-bottom: -.5em">Feels Like</p>
+                  <h1 class="bold">{{tempF}}&deg;F</h1>
+                </div>
                 <v-card-text>
                   <div class="forecast text-center">
-                    <p class="temp">{{maxTempF}}&deg;F/{{minTempF}}&deg;F</p>
+                    <p class="temp">High: {{maxTempF}}&deg;F | Low: {{minTempF}}&deg;F</p>
                   </div>
                 </v-card-text>
                 <div class="location">
-                  <p>{{city}}, {{state}}</p>
+                  <p>{{city}}</p>
                 </div>
               </div>
             </v-img>
@@ -49,7 +52,7 @@
 
 <script>
   export default {
-    props: ['city', 'state', 'localtime', 'tempF', 'imgUrl', 'imgAlt', 'windSpeed', 'humidity', 'fullReportUrl', 'maxTempF', 'minTempF'],
+    props: ['city', 'tempF', 'imgUrl', 'imgAlt', 'windSpeed', 'humidity', 'maxTempF', 'minTempF'],
     data () {
       return {
         options: { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' },
@@ -79,12 +82,6 @@
 </script>
 
 <style>
-  .v-card__title {
-    font-weight: 900;
-    font-size: 2em;
-    padding-top: 0px;
-    
-  }
 
   .location {
     position: absolute;
@@ -120,6 +117,7 @@
   .today-report {
     padding-bottom: 4em;
   }
+
 
 
 </style>
