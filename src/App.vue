@@ -51,7 +51,8 @@
           <div v-if="isLoaded" class="weather-widget">
             <WeatherCard
               :city = "data.name"
-              :tempF = "parseInt(data.main.feels_like)"
+              :feelsLike = "parseInt(data.main.feels_like)"
+              :tempF = "parseInt(data.main.temp)"
               :imgUrl = "imgUrl"
               :imgAlt = "data.weather[0].description"
               :windSpeed= "data.wind.speed"
