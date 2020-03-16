@@ -94,7 +94,7 @@ export default {
     isLoaded: false,
     zipCode: '97701',
     imgUrl: '',
-    key: 'd1f37ccd92a94a5ba8a21313202701'
+    key: process.env.VUE_APP_API_KEY
   }),
   created() {
       this.getWeather()
@@ -107,7 +107,7 @@ export default {
           await axios({
             url: `https://community-open-weather-map.p.rapidapi.com/find`,
             method: 'GET',
-            headers: {"X-RapidAPI-Key": "ee8b7255d6msh6353b4abd900d53p1d68f7jsn51d306c93256"},
+            headers: {"X-RapidAPI-Key": this.key},
             params: {
               "type": "link%2C accurate",
               "units": "imperial",
