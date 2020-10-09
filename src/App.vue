@@ -69,7 +69,7 @@
           </div>
           <v-card-actions>
             <div class="footer text-center">
-              <span>Created by: Bnice | &copy; 2019</span>
+              <span>Created by: Bnice | &copy; 2020</span>
             </div>
           </v-card-actions>
           </v-card>
